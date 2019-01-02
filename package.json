@@ -1,12 +1,13 @@
 {
-  "name": "is",
+  "name": "is.all",
   "version": "0.0.0",
   "description": "A sample project with is utilities",
   "repository": "robus/is",
   "author": "Robus Gauli <robusgauli@gmail.com>",
   "license": "MIT",
   "keywords": [],
-  "main": "index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
   "jsnext:main": "index.es.js",
   "babel": {
     "presets": [
