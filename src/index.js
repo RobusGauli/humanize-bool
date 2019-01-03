@@ -38,17 +38,25 @@ function is() {
       const computedFlags = args
         .map(arg => arg instanceof protoType);
 
-      return this[this.currentFlag.toLocaleLowerCase()](computedFlags);
+      return this[this.currentFlag](computedFlags);
     },
     equalTo(value) {
       const computedFlags = args
         .map(arg => arg === value);
-
-      return this[this.currentFlag.toLowerCase()](computedFlags);
+      
+      
+      return this[this.currentFlag](computedFlags);
     },
     typeof(type) {
-      const computedFlags = args.map(arg => typeof arg === type);
-      return this[this.currentFlag.toLowerCase()](computedFlags);
+      // handle for array
+      let computedFlags;
+      if (type.toLowerCase() === 'array') {
+        computedFlags = args.map(Array.isArray)
+      } else {
+        computedFlags = args.map(arg => typeof arg === type);
+      }
+
+      return this[this.currentFlag](computedFlags);
     },
     length(len) {
       if (typeof len !== 'number') {
@@ -59,18 +67,38 @@ function is() {
       }
       return args.length === len;
     },
-    all(computedFlags) {
+    ALL(computedFlags) {
       return computedFlags.reduce((acc, val) => acc && val, true);
     },
-    not(computedFlags) {
+    NOT(computedFlags) {
       return !this.ALL(computedFlags);
     },
-    any(computedFlags) {
+    ANY(computedFlags) {
       return computedFlags.reduce((acc, val) => acc || val, false);
     },
+    // Helper functions for standards types in JS
+    undefined() {
+      return this.equalTo(undefined);
+    },
+    number() {
+      return this.typeof('number')
+    },
+    string() {
+      return this.typeof('string')
+    },
+    boolean() {
+      return this.typeof('boolean');
+    },
+    object() {
+      return this.typeof('object');
+    },
+    array() {
+      return this.typeof('array');
+    }
   }, {
-    // traps
+    // Proxy traps
     get(target, name) {
+      
       if (flags[name]) {
         return flags[name](target, proxyInstance);
       }
