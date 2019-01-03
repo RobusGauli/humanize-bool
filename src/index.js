@@ -94,6 +94,12 @@ function is() {
     },
     array() {
       return this.typeof('array');
+    },
+    symbol() {
+      return this.typeof('symbol');
+    },
+    func() {
+      return this.typeof('function');
     }
   }, {
     // Proxy traps
