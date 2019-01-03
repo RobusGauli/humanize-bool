@@ -1,0 +1,20 @@
+{
+  "env": {
+    "mocha": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 7,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true
+    }
+  },
+  "rules": {
+    "no-underscore-dangle": "off",
+    "no-confusing-arrow": "off",
+    "no-restricted-syntax": "off",
+    "no-unused-expressions": "off",
+    "padded-blocks": "off",
+    "func-names": "off"
+  }
+}

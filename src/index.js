@@ -8,16 +8,16 @@
  */
 
 function is() {
+  // Arguments to the function
   const args = Array.prototype.slice.call(arguments);
-  // flags constants
+  // Flags constants
   const NOT = 'NOT';
   const ANY = 'ANY';
   const ALL = 'ALL';
-
   const OF = 'OF';
 
   function setCurrentFlag(flag) {
-    return function wrapper(target, proxyInstance) {
+    return function(target, proxyInstance) {
       target.currentFlag = flag;
       return proxyInstance;
     };
@@ -38,37 +38,34 @@ function is() {
       const computedFlags = args
         .map(arg => arg instanceof protoType);
 
-      return this[this.currentFlag](computedFlags);
+      return this[this.currentFlag.toLocaleLowerCase()](computedFlags);
     },
     equalTo(value) {
       const computedFlags = args
         .map(arg => arg === value);
 
-      return this[this.currentFlag](computedFlags);
+      return this[this.currentFlag.toLowerCase()](computedFlags);
     },
     typeof(type) {
       const computedFlags = args.map(arg => typeof arg === type);
-      return this[this.currentFlag](computedFlags);
+      return this[this.currentFlag.toLowerCase()](computedFlags);
     },
     length(len) {
       if (typeof len !== 'number') {
         throw new TypeError('Len argument must be of type Number.');
-      }
-      if (!args.length) {
-        return args.length === len;
       }
       if (Array.isArray(args[0])) {
         return args[0].length === len;
       }
       return args.length === len;
     },
-    ALL(computedFlags) {
+    all(computedFlags) {
       return computedFlags.reduce((acc, val) => acc && val, true);
     },
-    NOT(computedFlags) {
+    not(computedFlags) {
       return !this.ALL(computedFlags);
     },
-    ANY(computedFlags) {
+    any(computedFlags) {
       return computedFlags.reduce((acc, val) => acc || val, false);
     },
   }, {
