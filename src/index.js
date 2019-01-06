@@ -17,6 +17,8 @@ function is(arg) {
       yield * arg;
     }
   }
+
+  
   // types and value for a given JS data
   const valuesMap = {
     undefined: undefined,
@@ -27,7 +29,9 @@ function is(arg) {
     object: 'object',
     boolean: 'boolean',
     symbol: 'symbol',
-    function: 'function'
+    function: 'function',
+    string: 'string',
+    number: 'number'
   }
 
   const obj = {
@@ -46,6 +50,16 @@ function is(arg) {
     null: function () {
       if (this.isValueCheck) {
         this.values.push(valuesMap.null);
+      }
+    },
+    string: function() {
+      if (!this.isValueCheck) {
+        this.types.push(typesMap.string);
+      }
+    },
+    number: function() {
+      if (!this.isValueCheck) {
+        this.types.push(typesMap.number)
       }
     },
     object: function() {
@@ -78,34 +92,27 @@ function is(arg) {
       this.all = false;
     }
   }
+  function computation(predicate) {
+    return function(...values) {
+      const flags = values.map(predicate);
+    
+      return obj.all
+        ? flags.reduce((acc, flag) => acc && flag, true)
+        : flags.reduce((acc, flag) => acc || flag, false);  
+    }
+  }
+
+  const valueCompute = computation(value =>  arg === value);
+  const typeCompute = computation(value => typeof arg === value);
 
   function compute(...values) {
     // need to evaluate the expression  
     return obj.isValueCheck
-      ? valueCompute(...values)
-      : typeCompute(...values)
+      ? valueCompute(...values, ...obj.values)
+      : typeCompute(...values, ...obj.types);
   }
-
-  function typeCompute(...values) {
-    const userComputedFlags = values.map(value => typeof arg === value);
-    const computedFlags = obj.types.map(value => typeof arg === value);
-    
-    const flags = [...userComputedFlags, ...computedFlags];
-    
-    return obj.all
-      ? flags.reduce((acc, flag) => acc && flag, true)
-      : flags.reduce((acc, flag) => acc || flag, false);
-  }
-
-  function valueCompute(...values) {
-    const userComputedFlags = values.map(value => arg === value);
-    const computedFlags = obj.values.map(value => arg === value);
-    const flags = [...userComputedFlags, ...computedFlags];
-    return obj.all
-      ? flags.reduce((acc, flag) => acc && flag, true)
-      : flags.reduce((acc, flag) => acc || flag, false);
-  }
-  // what i wanna do it return the function as an proxy back to the user
+  
+  // return the proxy back if attribute is missing
   const proxy = new Proxy(compute, {
     get(target, name) {
       if (obj[name]) {
