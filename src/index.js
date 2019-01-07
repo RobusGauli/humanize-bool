@@ -1,4 +1,3 @@
-
 /**
  * Is (Robus Gauli robusgauli@gmail.com)
  *
@@ -11,7 +10,8 @@
 
 function is(arg) {
 
-  const obj = {
+  // Initial Evaluation state
+  const evaluationState = {
     all: true,
     values: [],
     types: [],
@@ -29,32 +29,32 @@ function is(arg) {
         this.values.push(null);
       }
     },
-    string: function() {
+    string: function () {
       if (!this.isValueCheck) {
         this.types.push('string');
       }
     },
-    number: function() {
+    number: function () {
       if (!this.isValueCheck) {
         this.types.push('number')
       }
     },
-    object: function() {
-      if(!this.isValueCheck) {
+    object: function () {
+      if (!this.isValueCheck) {
         this.types.push('object');
       }
     },
-    boolean: function() {
+    boolean: function () {
       if (!this.isValueCheck) {
         this.types.push('boolean')
       }
     },
-    symbol: function() {
+    symbol: function () {
       if (!this.isValueCheck) {
         this.types.push('symbol');
       }
     },
-    func: function() {
+    func: function () {
       if (!this.isValueCheck) {
         this.types.push('function')
       }
@@ -62,38 +62,43 @@ function is(arg) {
     type: function () {
       this.isValueCheck = false;
     },
-    or: function() {
+    or: function () {
       this.all = false;
     },
-    any: function() {
+    any: function () {
       this.all = false;
     }
   }
-  function computation(predicate) {
-    return function(...values) {
-      const flags = values.map(predicate);
-    
-      return obj.all
-        ? flags.reduce((acc, flag) => acc && flag, true)
-        : flags.reduce((acc, flag) => acc || flag, false);  
-    }
-  }
 
-  const valueCompute = computation(value =>  arg === value);
-  const typeCompute = computation(value => typeof arg === value);
+  /**
+   * Evaluator decorator takes predicate as an input and returns the function that evaluates to an expression given a predicate.
+   *  
+   * @param {function} predicate
+   * @returns {function} 
+   */
 
-  function compute(...values) {
-    // need to evaluate the expression  
-    return obj.isValueCheck
-      ? valueCompute(...values, ...obj.values)
-      : typeCompute(...values, ...obj.types);
-  }
+  const evaluator = predicate => (...values) => 
+    evaluationState.all 
+      ? values.map(predicate).reduce((acc, flag) => acc && flag, true) 
+      : values.map(predicate).reduce((acc, flag) => acc || flag, false);
+
   
-  // return the proxy back if attribute is missing
-  const proxy = new Proxy(compute, {
+  // This function evaluates to boolean expression given a values.
+  const evaluateValue = evaluator(value => arg === value);
+  // This functiob evaluates to boolean expression given a types. 
+  const evaluateType = evaluator(value => typeof arg === value);
+
+  // Function that is called by the user code
+  const evaluate = (...values) => 
+    evaluationState.isValueCheck
+      ? evaluateValue(...values, ...evaluationState.values)
+      : evaluateType(...values, ...evaluationState.types);
+
+  // Return the proxy back if attribute is missing
+  const proxy = new Proxy(evaluate, {
     get(target, name) {
-      if (obj[name]) {
-        obj[name].call(obj)
+      if (evaluationState[name]) {
+        evaluationState[name].call(evaluationState)
       }
       return proxy;
     }
