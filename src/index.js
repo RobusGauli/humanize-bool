@@ -10,29 +10,6 @@
 
 
 function is(arg) {
-  const hasProp = Object.prototype.hasOwnProperty;
-
-  function* chain(...args) {
-    for (let arg of args) {
-      yield * arg;
-    }
-  }
-
-  
-  // types and value for a given JS data
-  const valuesMap = {
-    undefined: undefined,
-    null: null,
-  }
-  const typesMap = {
-    undefined: 'undefined',
-    object: 'object',
-    boolean: 'boolean',
-    symbol: 'symbol',
-    function: 'function',
-    string: 'string',
-    number: 'number'
-  }
 
   const obj = {
     all: true,
@@ -42,44 +19,44 @@ function is(arg) {
     undefined: function () {
       if (this.isValueCheck) {
 
-        this.values.push(valuesMap.undefined);
+        this.values.push(undefined);
       } else {
-        this.types.push(typesMap.undefined);
+        this.types.push('undefined');
       }
     },
     null: function () {
       if (this.isValueCheck) {
-        this.values.push(valuesMap.null);
+        this.values.push(null);
       }
     },
     string: function() {
       if (!this.isValueCheck) {
-        this.types.push(typesMap.string);
+        this.types.push('string');
       }
     },
     number: function() {
       if (!this.isValueCheck) {
-        this.types.push(typesMap.number)
+        this.types.push('number')
       }
     },
     object: function() {
       if(!this.isValueCheck) {
-        this.types.push(typesMap.object);
+        this.types.push('object');
       }
     },
     boolean: function() {
       if (!this.isValueCheck) {
-        this.types.push(typesMap.boolean)
+        this.types.push('boolean')
       }
     },
     symbol: function() {
       if (!this.isValueCheck) {
-        this.types.push(typesMap.symbol);
+        this.types.push('symbol');
       }
     },
     func: function() {
       if (!this.isValueCheck) {
-        this.types.push(typesMap.function)
+        this.types.push('function')
       }
     },
     type: function () {
