@@ -83,7 +83,7 @@ export default function is(arg) {
   
   // This function evaluates to boolean expression given a values.
   const evaluateValue = evaluator(value => arg === value);
-  // This functiob evaluates to boolean expression given a types. 
+  // This function evaluates to boolean expression given a types. 
   const evaluateType = evaluator(value => typeof arg === value);
 
   // Function that is called by the user code
