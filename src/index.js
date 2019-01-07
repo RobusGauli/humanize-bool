@@ -7,9 +7,7 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-
-function is(arg) {
-
+export default function is(arg) {
   // Initial Evaluation state
   const evaluationState = {
     all: true,
@@ -107,4 +105,4 @@ function is(arg) {
   return proxy;
 }
 
-export default is;
+
