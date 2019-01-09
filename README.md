@@ -1,4 +1,4 @@
-# is
+# Boolean Expression Evaluator for humans
 
 ## Installation
 

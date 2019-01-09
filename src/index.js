@@ -1,5 +1,5 @@
 /**
- * Is (Robus Gauli robusgauli@gmail.com)
+ * humanize-bool (Robus Gauli robusgauli@gmail.com)
  *
  * Copyright © 2018-2019 Robus Gauli. All rights reserved.
  *
