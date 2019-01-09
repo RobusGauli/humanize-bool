@@ -1,13 +1,18 @@
 # is
 
+## Installation
+
 ```unix
 // Add as a dependency
 npm install is.all --save
 ```
+
+## Usage
 ```javascript
 import is from 'is.all';
 ```
 
+## Examples
 
 ```javascript
 // Before
