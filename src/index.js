@@ -40,11 +40,18 @@
  */
 export default function is(arg) {
   
+  const args = Array.prototype.slice.call(arguments)
+  
+  if (!args.length || args.length > 1) {
+    throw new Error('Should have one argument to the function.')
+  }
+  
   const {
     toString,
     hasOwnProperty: hasProp
   } = Object.prototype;
 
+  
   // Initial Evaluation state
   const evaluationState = {
     all: true,
@@ -115,7 +122,7 @@ export default function is(arg) {
 
     return true;
   }
-  
+
   const callableUtils = {
     withKeys: function(...args) {
       const reducerPredicate = evaluationState.all

@@ -1,6 +1,6 @@
 {
   "name": "humanize-bool",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Intuitive boolean expression evaluator for humans.",
   "repository": "https://github.com/RobusGauli/humanize-bool",
   "author": "Robus Gauli <robusgauli@gmail.com>",
