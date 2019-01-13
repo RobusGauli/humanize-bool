@@ -3,13 +3,19 @@
 ## Installation
 
 ```unix
-// Add as a dependency
-npm install is.all --save
+// From NPM
+npm install humanize-bool --save
+```
+
+
+```unix
+// From Yarn
+yarn add humanize-bool 
 ```
 
 ## Usage
 ```javascript
-import is from 'is.all';
+import is from 'humanize-bool';
 ```
 
 ## Examples
