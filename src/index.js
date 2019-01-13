@@ -115,6 +115,7 @@ export default function is(arg) {
 
     return true;
   }
+  
   const callableUtils = {
     withKeys: function(...args) {
       const reducerPredicate = evaluationState.all
