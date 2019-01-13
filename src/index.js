@@ -39,11 +39,18 @@
  *
  */
 export default function is(arg) {
+  
+  const {
+    toString,
+    hasOwnProperty: hasProp
+  } = Object.prototype;
+
   // Initial Evaluation state
   const evaluationState = {
     all: true,
     values: [],
     types: [],
+    positive: true,
     isValueCheck: true,
     undefined: function() {
       if (this.isValueCheck) {
@@ -95,8 +102,32 @@ export default function is(arg) {
     },
     any: function() {
       this.all = false;
-    }
+    },
   };
+
+  function _hasNestedKeys(obj, keys) {
+    if (keys.length) {
+      const key = keys[0];
+      return toString.call(obj) === '[object Object]' &&
+        hasProp.call(obj, key) && 
+        _hasNestedKeys(obj[key], keys.slice(1))
+    }
+
+    return true;
+  }
+  const callableUtils = {
+    hasKeys: function(...args) {
+      const reducerPredicate = evaluationState.all
+        ? (acc, flag) => acc && flag
+        : (acc, flag) => acc || flag;
+      const predicate = val => hasProp.call(arg, val);
+
+      return args.map(predicate).reduce(reducerPredicate, evaluationState.all)
+    },
+    hasNestedKeys: function(...args) {
+      return _hasNestedKeys(arg, args);
+    }
+  }
 
   /**
    * Evaluator decorator takes predicate as an input and returns the function that evaluates to an expression given a predicate.
@@ -104,7 +135,6 @@ export default function is(arg) {
    * @param {function} predicate
    * @returns {function}
    */
-
   const evaluator = predicate => (...values) =>
     evaluationState.all
       ? values.map(predicate).reduce((acc, flag) => acc && flag, true)
@@ -124,9 +154,16 @@ export default function is(arg) {
   // Return the proxy back if attribute is missing
   const proxy = new Proxy(evaluate, {
     get(target, name) {
+      
+      // Call the callable utils if available
+      if (hasProp.call(callableUtils, name)) {
+        return callableUtils[name];
+      }
+
       if (evaluationState[name]) {
         evaluationState[name].call(evaluationState);
       }
+
 
       return proxy;
     }
