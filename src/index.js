@@ -116,7 +116,7 @@ export default function is(arg) {
     return true;
   }
   const callableUtils = {
-    hasKeys: function(...args) {
+    withKeys: function(...args) {
       const reducerPredicate = evaluationState.all
         ? (acc, flag) => acc && flag
         : (acc, flag) => acc || flag;
@@ -124,8 +124,26 @@ export default function is(arg) {
 
       return args.map(predicate).reduce(reducerPredicate, evaluationState.all)
     },
-    hasNestedKeys: function(...args) {
+    withNestedKeys: function(...args) {
       return _hasNestedKeys(arg, args);
+    },
+    positive: function() {
+      return arg > 0;
+    },
+    negative: function() {
+      return arg  < 0
+    },
+    zero: function() {
+      return arg === 0
+    },
+    nan: function() {
+      return toString.call(arg) === '[object Number]' && arg.tostring() === 'NaN';
+    },
+    infinity: function() {
+      return toString.call(arg) === '[object Number]' && arg.toString() === 'Infinity';
+    },
+    ofLength: function(value) {
+      return arg.length === value;
     }
   }
 
