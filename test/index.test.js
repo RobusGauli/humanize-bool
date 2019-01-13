@@ -10,17 +10,16 @@ describe("Humanize Boolean Evaluator", () => {
     })
 
     it("should throw an error if no argument is passed to the function", () => {
-
       expect(is)
         .to.throw(Error)
     })
 
     it("should not throw an error if argument is passed to the function", () => {
       expect(() => is(null))
-      .to.not.throw(Error);
+        .to.not.throw(Error);
     })
 
-    it("should throw and error if more than one argument is passed to the function", () => {
+    it("should throw an error if more than one argument is passed to the function", () => {
       expect(() => is(null, undefined))
         .to.throw(Error);
     })
